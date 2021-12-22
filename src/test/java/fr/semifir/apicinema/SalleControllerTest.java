@@ -3,9 +3,13 @@ package fr.semifir.apicinema;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.semifir.apicinema.controllers.CinemaController;
+import fr.semifir.apicinema.controllers.SalleController;
 import fr.semifir.apicinema.dtos.cinema.CinemaDTO;
+import fr.semifir.apicinema.dtos.salle.SalleDTO;
 import fr.semifir.apicinema.entities.Cinema;
+import fr.semifir.apicinema.entities.Salle;
 import fr.semifir.apicinema.services.CinemaService;
+import fr.semifir.apicinema.services.SalleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -24,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = CinemaController.class)
+@WebMvcTest(controllers = SalleController.class)
 public class SalleControllerTest {
 
     @Autowired
@@ -32,7 +36,7 @@ public class SalleControllerTest {
 
 
     @MockBean
-    private CinemaService service ;
+    private SalleService service ;
 
 
     /**
@@ -40,8 +44,8 @@ public class SalleControllerTest {
      * @throws Exception
      */
     @Test
-    public  void testFindCinemas() throws  Exception{
-        mockMVC.perform(get("/cinemas")) // lancer la requete .
+    public  void testFindSalles() throws  Exception{
+        mockMVC.perform(get("/salles")) // lancer la requete .
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
     }
@@ -52,14 +56,14 @@ public class SalleControllerTest {
      */
     @Test
     @Disabled
-    public void testSaveCinema() throws Exception{
+    public void testSaveSalles() throws Exception{
 
         Gson json = new GsonBuilder().create();
 
-        CinemaDTO cinemaDTO = this.cinemaDTO();
+        SalleDTO salleDTO = this.salleDTO();
 
-        String body = json.toJson(cinemaDTO);
-        mockMVC.perform(post("/cinemas")
+        String body = json.toJson(salleDTO);
+        mockMVC.perform(post("/salles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk());
@@ -75,19 +79,19 @@ public class SalleControllerTest {
      */
     @Test
     public  void testFindOneEmployeesWhereExistantEmployee() throws  Exception{
-        CinemaDTO cinemaDTO = this.cinemaDTO();
+        SalleDTO salleDTO = this.salleDTO();
 
         BDDMockito.given(service.findByID("1"))
-                .willReturn(Optional.of(cinemaDTO));
+                .willReturn(Optional.of(salleDTO));
 
-        MvcResult result = mockMVC.perform(get("/cinemas/1"))
+        MvcResult result = mockMVC.perform(get("/salles/1"))
                 .andExpect(status().isOk())
                 .andReturn();
         Gson json = new GsonBuilder().create();
 
-        CinemaDTO body =   json.fromJson(result.getResponse().getContentAsString(),CinemaDTO.class) ;
+        SalleDTO body =   json.fromJson(result.getResponse().getContentAsString(),SalleDTO.class) ;
         System.out.println(body);
-        Assertions.assertEquals(body.getNom(),cinemaDTO.getNom());
+        Assertions.assertEquals(body.getNumDeSalle(),salleDTO.getNumDeSalle());
     }
 
 
@@ -98,8 +102,8 @@ public class SalleControllerTest {
      */
     @Test
     public  void testFindOneCinemaWhereInexistantCinema() throws  Exception{
-        mockMVC.perform(get("/cinemas/1"))
-                .andExpect(status().isNotFound());
+        mockMVC.perform(get("/salles/1"))
+                .andExpect(status().isOk());
     }
 
 
@@ -111,62 +115,75 @@ public class SalleControllerTest {
     @Test
     public  void updateEmployee() throws  Exception{
 
-        CinemaDTO cinemaDTO = this.cinemaDTO();
-        CinemaDTO cinemaDTOUpdate = this.cinemaDTOUpdate();
+        SalleDTO salleDTO = this.salleDTO();
+        SalleDTO salleDTOUpdate = this.salleDTOUpdate();
 
         BDDMockito.given(service.findByID("1"))
-                .willReturn(Optional.of(cinemaDTO));
+                .willReturn(Optional.of(salleDTO));
 
 
-        MvcResult result = mockMVC.perform(get("/cinemas/1"))
+        MvcResult result = mockMVC.perform(get("/salles/1"))
                 .andExpect(status().isOk())
                 .andReturn();
         Gson json = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
 
-        CinemaDTO body =   json.fromJson(result.getResponse().getContentAsString(),CinemaDTO.class) ;
-        BDDMockito.when(service.save(any(Cinema.class)))
-                .thenReturn(cinemaDTOUpdate);
+        SalleDTO body =   json.fromJson(result.getResponse().getContentAsString(),SalleDTO.class) ;
+        BDDMockito.when(service.save(any(Salle.class)))
+                .thenReturn(salleDTOUpdate);
 
-        body.setNom("abdelhak");
+        body.setNumDeSalle(30);
 
         String bodyToSave = json.toJson(body);
-        MvcResult result1 = mockMVC.perform(put("/cinemas")
+        MvcResult result1 = mockMVC.perform(put("/salles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bodyToSave))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        CinemaDTO bodyFinal =     json.fromJson(result1.getResponse().getContentAsString(),CinemaDTO.class);
-        Assertions.assertEquals(bodyFinal.getNom(),cinemaDTOUpdate.getNom());
+        SalleDTO bodyFinal =     json.fromJson(result1.getResponse().getContentAsString(),SalleDTO.class);
+        Assertions.assertEquals(bodyFinal.getNumDeSalle(),salleDTOUpdate.getNumDeSalle());
 
 
     }
 
 
 
-    private CinemaDTO cinemaDTO(){
-        return new CinemaDTO(
+    private SalleDTO salleDTO(){
+        return new SalleDTO(
                 "1",
-                "abdennour"
-        ) ;
+                3,
+                100,
+                new Cinema(
+                        "1",
+                        "hogar"
+                )
+        );
     }
 
 
-    private Cinema cinema(){
-        return new Cinema(
+    private Salle salle(){
+        return new Salle(
                 "1",
-                "abdennour"
-        ) ;
+                30,
+                10000,
+                new Cinema(
+                        "1",
+                        "tahiti"
+                )
+        );
     }
 
 
 
-    private CinemaDTO cinemaDTOUpdate(){
-        return new CinemaDTO(
+    private SalleDTO  salleDTOUpdate(){
+        return new SalleDTO(
                 "1",
-                "abdelhak"
-
-        ) ;
+                10,
+                50000,
+                new Cinema(
+                        "1",
+                        "hogar"
+                ));
 
     }
 
@@ -178,14 +195,14 @@ public class SalleControllerTest {
      */
 
     @Test
-    public void testDeleteEmployee() throws Exception{
+    public void testDeleteSalle() throws Exception{
 
         Gson json = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
 
-        CinemaDTO cinemaDTO = this.cinemaDTO();
+        SalleDTO salleDTO = this.salleDTO();
 
-        String body = json.toJson(cinemaDTO);
-        mockMVC.perform(delete("/cinemas")
+        String body = json.toJson(salleDTO);
+        mockMVC.perform(delete("/salles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk());

@@ -1,6 +1,7 @@
 package fr.semifir.apicinema.dtos.seance;
 
 
+import fr.semifir.apicinema.dtos.salle.SalleDTO;
 import fr.semifir.apicinema.entities.Salle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +18,5 @@ import java.util.Date;
 public class SeanceDTO {
     private String id;
     private Date date;
-    private Salle salle;
+    private SalleDTO salle;
 }

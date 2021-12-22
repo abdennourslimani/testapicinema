@@ -41,8 +41,8 @@ public class FilmService {
 
     /**
      * Je récupère un film selon son ID
-     * @param id
-     * @return
+     * @param @id
+     * @return Optional wFilm DTO>
      */
     public Optional<FilmDTO> findByID(String id) throws NotFoundException {
         Optional<Film> film = this.repository.findById(id);
@@ -60,8 +60,8 @@ public class FilmService {
      * @param film
      * @return
      */
-    public FilmDTO save(Film film) {
-        return mapper.map(this.repository.save(film), FilmDTO.class);
+    public FilmDTO save(FilmDTO film) {
+       return mapper.map( repository.save(mapper.map(film , Film.class)),FilmDTO.class);
     }
 
     /**
