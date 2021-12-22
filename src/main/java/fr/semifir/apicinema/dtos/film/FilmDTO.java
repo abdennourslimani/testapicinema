@@ -1,6 +1,7 @@
 package fr.semifir.apicinema.dtos.film;
 
 
+import fr.semifir.apicinema.dtos.seance.SeanceDTO;
 import fr.semifir.apicinema.entities.Seance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +19,5 @@ public class FilmDTO {
     private String id;
     private String nom;
     private Float duree;
-    private Seance seance;
+    private SeanceDTO seance;
 }
