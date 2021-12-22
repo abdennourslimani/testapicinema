@@ -35,12 +35,12 @@ public class FilmController {
     }
 
     @PostMapping
-    public FilmDTO save(@RequestBody Film film) {
+    public FilmDTO save(@RequestBody FilmDTO film) {
         return this.service.save(film);
     }
 
     @PutMapping
-    public FilmDTO update(@RequestBody Film film) {
+    public FilmDTO update(@RequestBody FilmDTO film) {
         return this.service.save(film);
     }
 
