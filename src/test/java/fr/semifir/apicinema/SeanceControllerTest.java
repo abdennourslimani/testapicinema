@@ -103,7 +103,7 @@ public class SeanceControllerTest {
      * @throws Exception
      */
     @Test
-    public  void testFindOneSeancesWhereInexistantSeances() throws  Exception{
+    public  void testFindOneCinemaWhereInexistantCinema() throws  Exception{
         mockMVC.perform(get("/seances/1"))
                 .andExpect(status().isOk());
     }
@@ -115,7 +115,7 @@ public class SeanceControllerTest {
      * @throws Exception
      */
     @Test
-    public  void updateSeances() throws  Exception{
+    public  void updateEmployee() throws  Exception{
 
         SeanceDTO seanceDTO = this.seanceDTO();
         SeanceDTO seanceDTOUpdate = this.seanceDTOUpdate();
