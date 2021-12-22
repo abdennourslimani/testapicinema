@@ -2,17 +2,17 @@ package fr.semifir.apicinema;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.semifir.apicinema.controllers.SalleController;
+
 import fr.semifir.apicinema.controllers.SeanceController;
 import fr.semifir.apicinema.dtos.salle.SalleDTO;
 import fr.semifir.apicinema.dtos.seance.SeanceDTO;
 import fr.semifir.apicinema.entities.Cinema;
 import fr.semifir.apicinema.entities.Salle;
 import fr.semifir.apicinema.entities.Seance;
-import fr.semifir.apicinema.services.SalleService;
+
 import fr.semifir.apicinema.services.SeanceService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,7 @@ public class SeanceControllerTest {
      * @throws Exception
      */
     @Test
-    public  void testFindOneCinemaWhereInexistantCinema() throws  Exception{
+    public  void testFindOneSeanceWhereInexistantSeance() throws  Exception{
         mockMVC.perform(get("/seances/1"))
                 .andExpect(status().isOk());
     }
@@ -115,7 +115,7 @@ public class SeanceControllerTest {
      * @throws Exception
      */
     @Test
-    public  void updateEmployee() throws  Exception{
+    public  void updateSeance() throws  Exception{
 
         SeanceDTO seanceDTO = this.seanceDTO();
         SeanceDTO seanceDTOUpdate = this.seanceDTOUpdate();
